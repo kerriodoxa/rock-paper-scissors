@@ -27,15 +27,17 @@ function isWinner(userSelection, computerSelection) {
     else return "Computer";
 }
 
+// Running the round
+function run () {
 // Function which starts the round and returns winner as a result
 function playRound(userSelection, computerSelection) {
     let result = isWinner(userSelection, computerSelection);
     if (result === "Tie!") {
         return "It is a tie!";
     } else if (result === "Player") {
-        return "Player wins! Congratulations!" 
+        return "Player wins!" 
     } else if (result === "Computer") {
-        return "Computer wins! Better luck next time!"
+        return "Computer wins!"
     }
 }
 
@@ -59,5 +61,27 @@ function resultLog() {
     console.log("Computer's choice:", computerSelection);
     }
 }
-
 resultLog();
+}
+
+
+// Function that runs 5 rounds of the game Rock Paper Scissors and declares a final winner
+function game() {
+    let playerScore = 0;
+    let computerScore = 0;
+
+    for (let i = 0; i < 5; i++) {
+        run();
+        if (isWinner === "Player") {
+            playerScore++;
+        } else if (isWinner === "Computer") {
+            computerScore++;
+        } else playerScore, computerScore;
+    }
+    
+    playerScore > computerScore ? console.log("Congratulations! Player is a winner of the game!") : console.log("Better luck next time! Computer is a winner of the game!");
+};
+
+// Calling the game function
+game();
+
