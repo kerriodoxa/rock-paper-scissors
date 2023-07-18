@@ -1,28 +1,27 @@
 // Options that computer or player can pick
 const choices = ["rock", "paper", "scissors"];
 
+// All buttons (choices)
+const rock = document.getElementById('rock');
+const paper = document.getElementById('paper');
+const scissors = document.getElementById('scissors');
+
+// Adding an event listener (click) on all the buttons
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(button => button.addEventListener('click', playRound));
+
+// Score elements
+let playerScore = document.getElementById('player_score');
+let computerScore = document.getElementById('computer_score');
+let tieScore = document.getElementById('tie_score');
+
+
+
 // Getting computer choice from the choices array
 function getComputerChoice() {
     let randomIndex = Math.floor((Math.random() * choices.length)); //Generating random index
     let computerChoice = choices[randomIndex]; //ComputerChoice gets assigned a random value from an array choices
     return computerChoice;
-}
-
-// Getting user choice from the prompt
-function getUserChoice() {
-    let validatedInput = false;
-        while(validatedInput == false) {
-            const userChoice = prompt("Pick your choice: rock, paper or scissors?");
-            if (userChoice == null) {
-                continue;
-            }
-
-        const userChoiceLowCase = userChoice.toLowerCase();
-            if(choices.includes(userChoiceLowCase)) {
-                validatedInput = true;
-                return userChoiceLowCase;
-            }
-        }
 }
 
 
@@ -40,59 +39,44 @@ function isWinner(userSelection, computerSelection) {
 }
 
 
-
-// Returning round score
-function playRound(userSelection, computerSelection) {
+// Playing round
+function playRound(event) {
+    const button = event.target.closest('.btn');
+    const userSelection = button.id;
+    const computerSelection = getComputerChoice();
     const roundWinner = isWinner(userSelection, computerSelection);
-    if (roundWinner == "Tie") {
-        return "It is a tie!";
-    } else if (roundWinner == "Player") {
-        return "Player wins!";
-    } else return "Computer wins!";
-}
-
-
-
-// Function that plays 5 rounds of the game and shows who is a winner
-function game() {
-    let userScore = 0; // player score
-    let computerScore = 0; // computer score
-
-    // Looping through the 5 rounds
-    for (let round = 1; round <= 5; round++) {
-        let userSelection = getUserChoice(); //userSelection has the value that function getUserChoice() returns
-        let computerSelection = getComputerChoice(); //computerSelection has the value that function getComputerChoice returns
-
-        // Logging number of rounds within the console
-        console.log(`Round ${round}`);
-
-        // Running playRound function for 5 times
-        playRound(userSelection, computerSelection);
-
-        // Increasing the scores through conditions
-        if (isWinner(userSelection, computerSelection) == "Player") {
-            userScore++;
-        } else if (isWinner(userSelection, computerSelection) == "Computer") {
-            computerScore++;
-        };
-
-        // Logging choices and round results within the console
-        console.log("User's choice:", userSelection);
-        console.log("Computer's choice:", computerSelection);
-        console.log(playRound(userSelection, computerSelection));
-}
-
-    // Logging final result depending on both player and computer score
-    console.log(`Player: ${userScore}, Computer: ${computerScore}`);
-    if (userScore < computerScore) {
-        console.log("Better luck next time! Computer wins the game!")
-    } else if (userScore > computerScore) {
-        console.log("Congratulations! Player wins!");
-    } else {
-        console.log("It is a draw!")
+    
+    if (roundWinner == "Player") {
+        let player = parseInt(playerScore.textContent);
+        playerScore.textContent = player + 1;
+    } else if (roundWinner == "Computer") {
+        let computer = parseInt(computerScore.textContent);
+        computerScore.textContent = computer + 1;
+    } else if (roundWinner == "Tie") {
+        let tie = parseInt(tieScore.textContent);
+        tieScore.textContent = tie + 1;
     }
+        console.log(roundWinner);
+        updateFinalScore();
 }
 
-// Running the game
-game();
+
+function updateFinalScore() {
+    // Announcing winner
+    if (playerScore.textContent == 5) {
+        alert("Congratulations! You are the best!");
+    } else if (computerScore.textContent == 5) {
+        alert("Game over! Better luck next time!")
+    } 
+    
+    // Reseting the scores
+    if (playerScore.textContent == 5 || computerScore.textContent == 5) {
+        playerScore.textContent = 0;
+        computerScore.textContent = 0;
+        tieScore.textContent = 0;
+    }
+};
+
+
+
 
